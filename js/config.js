@@ -31,7 +31,7 @@
          *   - Chạy trên localhost:8080 (khi bật server cục bộ)
          *   - Chạy P2P Offline Browser Bus (khi test 2 tab trên cùng máy)
          */
-        ONLINE_SERVER_URL: 'https://PLACEHOLDER-YOUR-SERVER-DOMAIN.com',
+        ONLINE_SERVER_URL: 'https://hunter-of-the-sea.onrender.com',
 
         /**
          * Tùy chọn nâng cao (nếu muốn cấu hình riêng rẽ API và WebSocket):
