@@ -1,0 +1,32 @@
+{
+  "name": "hunter-of-the-sea",
+  "version": "2.6.0",
+  "description": "Hunter of the Sea - Game Săn Mồi 2D & PvP Online (Desktop Edition)",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server/server.js",
+    "pack:win": "powershell -ExecutionPolicy Bypass -File ./package_windows.ps1",
+    "dist": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.game.huntersea",
+    "productName": "Hunter of the Sea",
+    "win": {
+      "target": ["portable", "nsis"],
+      "icon": "lobby_bg.jpg"
+    },
+    "files": [
+      "index.html",
+      "styles.css",
+      "js/**/*",
+      "*.png",
+      "*.jpg",
+      "electron-main.js"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3"
+  }
+}

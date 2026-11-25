@@ -1,0 +1,14 @@
+# Binaries and large tools
+cloudflared.exe
+*.log
+tunnel.log
+public_url.txt
+
+# Build artifacts
+dist/
+Backend/target/
+bin/
+
+# Temporary and profile dirs
+HunterOfTheSea_Profile/
+.vscode/

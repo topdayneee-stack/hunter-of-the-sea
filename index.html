@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunter of the Sea - Game 2D Săn Mồi Dưới Biển</title>
+    <meta name="description" content="Trò chơi 2D đại dương săn mồi hấp dẫn. Cá lớn nuốt cá bé, tiến hóa thủy thần, chiến đấu PvE kịch tính!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Floating Sea Bubbles Effect -->
+        <div id="bubble-container" class="bubble-container"></div>
+
+        <!-- MAIN LOBBY SCREEN -->
+        <div id="lobby-screen" class="screen active">
+            <div class="lobby-backdrop">
+                <img src="lobby_bg.jpg" alt="Hunter of the Sea Lobby Background" id="lobby-bg-img" class="lobby-bg-img">
+                <div class="water-rays"></div>
+            </div>
+
+            <div class="lobby-content">
+                <!-- Header Controls -->
+                <div class="top-bar">
+                    <div class="player-profile-badge" id="player-profile-badge" title="Bấm vào để đổi tên/tài khoản">
+                        <div class="avatar-ring">
+                            <img src="cá kiếm.jpg" id="lobby-current-avatar" alt="Selected Hunter">
+                        </div>
+                        <div class="profile-info">
+                            <span class="player-title" id="lobby-username">Thủy Thủ Săn Mồi</span>
+                            <span class="high-score-tag">Kỷ lục: <strong id="lobby-high-score">0</strong></span>
+                        </div>
+                        <span class="profile-edit-pill">Đổi tên ✏️</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="btn-sound" class="icon-btn" title="Âm thanh">
+                            <span class="icon">🔊</span>
+                        </button>
+                        <button id="btn-guide" class="icon-btn" title="Hướng dẫn">
+                            <span class="icon">❓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Version Indicator Badge -->
+                <div class="lobby-version-tag" id="app-version-badge" title="Hunter of the Sea - Phiên bản hệ thống & PvP">
+                    <span class="ver-dot"></span>
+                    <span class="ver-text">v2.5.0-PVP</span>
+                </div>
+
+                <!-- Game Mode Selector Section -->
+                <div class="mode-selection-section">
+                    <h2 class="section-title">CHỌN CHẾ ĐỘ CHƠI</h2>
+                    
+                    <div class="mode-cards-container">
+                        <!-- Mode 1: Classic Evolution (Tiến hóa Max Size LV.4) -->
+                        <div id="btn-classic-mode" class="mode-card classic-card glow-pulse-classic" title="Chơi Cơ Bản: Nuốt mồi tiến hóa từ LV.1 lên LV.4 để thống trị đại dương">
+                            <div class="mode-img-wrapper">
+                                <img src="cá kiếm.jpg" alt="Chế độ Chơi Cơ Bản" class="mode-btn-graphic">
+                                <div class="card-sparkle"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3>CHƠI CƠ BẢN</h3>
+                                <p>Săn mồi tiến hóa từ LV.1 đến LV.4 Max Size để chiến thắng!</p>
+                                <div class="badge-tag classic-tag">🌟 Tiến Hóa Lv.4</div>
+                            </div>
+                        </div>
+
+                        <!-- Mode 2: PvE Survival (Né Bom & Cá Độc) -->
+                        <div id="btn-pve-mode" class="mode-card pve-card glow-pulse" title="Sinh Tồn Máy: Đấu AI, né tránh bom biển nổ & cá độc rút máu">
+                            <div class="mode-img-wrapper">
+                                <img src="cá độc.jpg" alt="Chế độ chơi PvE" class="mode-btn-graphic">
+                                <div class="card-sparkle"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3>SINH TỒN PvE</h3>
+                                <p>Cá lớn nuốt cá bé - Cẩn thận Bom biển & Cá độc!</p>
+                                <div class="badge-tag">🤖 Né Bom & Độc</div>
+                            </div>
+                        </div>
+
+                        <!-- Mode 3: 3-Minute High Score (Đua Điểm 180s) -->
+                        <div id="btn-timed-mode" class="mode-card timed-card glow-pulse-timed" title="Đua Điểm 3 Phút: Đếm ngược 180 giây, săn cá lập kỷ lục điểm số cao nhất">
+                            <div class="mode-img-wrapper">
+                                <img src="bá khí.jpg" alt="Chế độ Đua Điểm 3 Phút" class="mode-btn-graphic">
+                                <div class="card-sparkle"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3>ĐUA ĐIỂM 3 PHÚT</h3>
+                                <p>Đếm ngược 180 giây - Săn mồi lập kỷ lục điểm số cao nhất!</p>
+                                <div class="badge-tag timed-tag">⏱️ 180 Giây</div>
+                            </div>
+                        </div>
+
+                        <!-- Mode 4: PvP Online 1v1 (Ghép phòng mã 4 số) -->
+                        <div id="btn-pvp-mode" class="mode-card pvp-card glow-pulse-pvp" title="Đối Kháng Online: Ghép phòng mã 4 số, so tài săn mồi 1v1 Realtime">
+                            <div class="mode-img-wrapper">
+                                <img src="rùa.jpg" alt="Chế độ chơi PvP Online" class="pvp-btn-graphic">
+                                <div class="card-sparkle"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3>ĐỐI KHÁNG PvP</h3>
+                                <p>Ghép phòng mã 4 số - So tài săn mồi 1v1 Online Realtime!</p>
+                                <div class="badge-tag pvp-tag">⚔️ Phòng Mã 4 Số</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Character Selection Slider -->
+                <div class="character-selection-section">
+                    <h3 class="sub-title">CHỌN THỦY THẦN SĂN MỒI</h3>
+                    <div class="character-carousel" id="character-carousel">
+                        <!-- Characters injected by JS -->
+                    </div>
+
+                    <!-- Selected Character Stats Card -->
+                    <div class="character-detail-card" id="character-detail-card">
+                        <div class="char-portrait">
+                            <img id="char-img" src="cá kiếm.jpg" alt="Hunter Detail">
+                        </div>
+                        <div class="char-meta">
+                            <h4 id="char-name">Cá Kiếm (Swordfish)</h4>
+                            <p id="char-desc">Tốc độ bơi cực nhanh, sở hữu cú lướt đâm xuyên mọi kẻ thù.</p>
+                            
+                            <div class="skill-preview">
+                                <img id="char-skill-img" src="kĩ năng cá kiếm.jpg" alt="Skill Icon">
+                                <div class="skill-text">
+                                    <strong id="char-skill-name">Lướt Đâm Băng Giá</strong>
+                                    <span id="char-skill-desc">Lướt về phía trước với tốc độ ánh sáng, hạ gục mồi lớn.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="screen hidden">
+            <!-- Game Canvas -->
+            <canvas id="game-canvas"></canvas>
+
+            <!-- Game HUD Overlay -->
+            <div id="game-hud" class="game-hud">
+                <!-- Top Left: Player Status & Stats -->
+                <div class="hud-top-left">
+                    <div class="hud-avatar-box">
+                        <img id="hud-avatar" src="cá kiếm.jpg" alt="Player Avatar">
+                        <span id="hud-level-badge" class="level-badge">LV.1</span>
+                    </div>
+                    <div class="hud-bars">
+                        <div class="bar-container hp-bar-container">
+                            <div id="hud-hp-fill" class="bar-fill hp-fill" style="width: 100%;"></div>
+                            <span id="hud-hp-text" class="bar-text">100 / 100 HP</span>
+                        </div>
+                        <div class="bar-container xp-bar-container">
+                            <div id="hud-xp-fill" class="bar-fill xp-fill" style="width: 0%;"></div>
+                            <span id="hud-xp-text" class="bar-text">EXP 0 / 100</span>
+                        </div>
+                        <div class="bar-container mana-bar-container" id="hud-mana-box" title="Thanh Mana: Ăn cá để nạp đầy 5/5 và kích hoạt chiêu [Q]">
+                            <div id="hud-mana-fill" class="bar-fill mana-fill" style="width: 0%;"></div>
+                            <span id="hud-mana-text" class="bar-text">MANA: 0.0 / 5.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Center: Score, Mode Badge & Timer -->
+                <div class="hud-top-center">
+                    <div class="hud-center-top-row">
+                        <div id="hud-mode-pill" class="hud-mode-pill">🌟 CHƠI CƠ BẢN</div>
+                        <div id="hud-timer-box" class="hud-timer-box hidden">
+                            <span class="timer-icon">⏱️</span>
+                            <span id="hud-timer-text">03:00</span>
+                        </div>
+                    </div>
+                    <div class="score-board">
+                        <span class="score-label">ĐIỂM SỐ</span>
+                        <span id="hud-score" class="score-value">0</span>
+                    </div>
+                    <div id="hud-frenzy-banner" class="frenzy-banner hidden">
+                        ⚡ SIÊU BÁ KHÍ! BẤT TỬ ⚡
+                    </div>
+                </div>
+
+                <!-- Top Right: Pause & Options & Bot Stats (PvE) -->
+                <div class="hud-top-right">
+                    <!-- Khung chỉ số Cá Máy (Bot đối thủ PvE) -->
+                    <div id="hud-bot-card" class="hud-bot-card hidden" title="Cá Máy (Bot đối thủ chế độ PvE)">
+                        <div class="hud-bars hud-bars-bot">
+                            <div class="hud-bot-name-row">
+                                <span class="bot-badge-tag">🤖 BOT ĐỐI THỦ</span>
+                                <span id="hud-bot-diff-badge" class="bot-diff-tag diff-tag-medium">VỪA</span>
+                                <span id="hud-bot-name" class="bot-name-text">Cá Kiếm (Bot)</span>
+                            </div>
+                            <div class="bar-container hp-bar-container">
+                                <div id="hud-bot-hp-fill" class="bar-fill hp-fill-bot" style="width: 100%;"></div>
+                                <span id="hud-bot-hp-text" class="bar-text">100 / 100 HP</span>
+                            </div>
+                            <div class="bar-container xp-bar-container">
+                                <div id="hud-bot-xp-fill" class="bar-fill xp-fill-bot" style="width: 0%;"></div>
+                                <span id="hud-bot-xp-text" class="bar-text">TIẾN HÓA: 0/8</span>
+                            </div>
+                        </div>
+                        <div class="hud-avatar-box hud-avatar-bot">
+                            <img id="hud-bot-avatar" src="cá kiếm.jpg" alt="Bot Avatar">
+                            <span id="hud-bot-level-badge" class="level-badge bot-level-badge">LV.1</span>
+                        </div>
+                    </div>
+                    <button id="btn-pause" class="icon-btn-hud" title="Tạm dừng trận đấu [ESC]">⏸️</button>
+                </div>
+
+                <!-- Bottom Right: Cụm 3 ô kỹ năng [Q] - [W] - [E] -->
+                <div class="hud-bottom-right">
+                    <div class="skills-cluster" id="skills-cluster">
+                        <!-- Ô [Q]: Kỹ năng Thủy Thần mặc định (Cần 5/5 Mana) -->
+                        <div class="skill-slot slot-q" id="slot-q" title="Kỹ năng Thủy Thần [Q] - Cần đầy 5/5 Mana">
+                            <img id="hud-skill-icon-q" src="kĩ năng cá kiếm.jpg" alt="Skill Q">
+                            <div id="skill-cooldown-q" class="cooldown-overlay" style="height: 100%;"></div>
+                            <span class="skill-key-badge key-q">Q</span>
+                            <span class="skill-name-tag" id="hud-skill-name-q">Thủy Thần</span>
+                        </div>
+
+                        <!-- Ô [W]: Kỹ năng nhặt được Slot 1 -->
+                        <div class="skill-slot slot-item slot-w empty" id="slot-w" title="Kỹ năng nhặt [W] (Trống)">
+                            <img id="hud-skill-icon-w" src="" alt="Skill W" class="hidden">
+                            <div class="slot-empty-placeholder" id="slot-placeholder-w">W</div>
+                            <span class="skill-key-badge key-w">W</span>
+                            <span class="skill-name-tag" id="hud-skill-name-w">Trống</span>
+                        </div>
+
+                        <!-- Ô [E]: Kỹ năng nhặt được Slot 2 -->
+                        <div class="skill-slot slot-item slot-e empty" id="slot-e" title="Kỹ năng nhặt [E] (Trống)">
+                            <img id="hud-skill-icon-e" src="" alt="Skill E" class="hidden">
+                            <div class="slot-empty-placeholder" id="slot-placeholder-e">E</div>
+                            <span class="skill-key-badge key-e">E</span>
+                            <span class="skill-name-tag" id="hud-skill-name-e">Trống</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Left: Mini-Map -->
+                <div class="hud-bottom-left">
+                    <div class="minimap-container">
+                        <canvas id="minimap-canvas" width="120" height="120"></canvas>
+                        <span class="minimap-title">BẢN ĐỒ</span>
+                    </div>
+                    <span class="hud-version-label" title="Hunter of the Sea Release">v2.5.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODALS -->
+
+        <!-- How To Play Modal -->
+        <div id="modal-guide" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2>HƯỚNG DẪN CHƠI</h2>
+                    <button class="modal-close" id="close-guide">✖</button>
+                </div>
+                <div class="modal-body">
+                    <div class="guide-item">
+                        <span class="guide-icon">🖱️</span>
+                        <div>
+                            <strong>Điều Khiển Chuột (Mouse-Aim):</strong>
+                            <p>Cá bơi liên tục hướng theo con trỏ chuột với tốc độ cố định theo từng loài. Có vùng đệm chống rung giật.</p>
+                        </div>
+                    </div>
+                    <div class="guide-item">
+                        <span class="guide-icon">⚡</span>
+                        <div>
+                            <strong>Phím [Q] - Kỹ Năng Mặc Định & Mana:</strong>
+                            <p>Ăn cá mồi để nạp Mana (1 cá = +1 Mana). Khi thanh Mana đầy <b>5/5</b> (phát sáng vàng), nhấn <b>[Q]</b> để thi triển kỹ năng đặc trưng theo hướng chuột!</p>
+                        </div>
+                    </div>
+                    <div class="guide-item">
+                        <span class="guide-icon">💎</span>
+                        <div>
+                            <strong>Phím [W] & [E] - Kỹ Năng Nhặt Được:</strong>
+                            <p>Bơi nhặt các ngọc kỹ năng trên biển vào 2 ô [W] và [E] (Lướt Tốc, Xung Điện, Khiên Thần, Vùng Mực, Bá Khí). Nhấn <b>[W]</b> hoặc <b>[E]</b> để dùng theo hướng chuột (tiêu hao 1 lần dùng). Đầy 2 ô sẽ ghi đè ô [E].</p>
+                        </div>
+                    </div>
+                    <div class="guide-item">
+                        <span class="guide-icon">🐟</span>
+                        <div>
+                            <strong>Cá Lớn Nuốt Cá Bé & Đối Kháng:</strong>
+                            <p>Ăn cá mồi nhỏ hơn để tiến hóa cấp kích cỡ. Trong PvP, cá lớn hơn sẽ nuốt chửng cá bé, bằng cấp húc nhau dội ngược.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="btn-guide-ok">ĐÃ HỂU</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Modal -->
+        <div id="modal-pause" class="modal-overlay hidden">
+            <div class="modal-card pause-modal-card">
+                <div class="pause-header">
+                    <h2>⏸️ TẠM DỪNG TRẬN ĐẤU</h2>
+                    <span id="pause-mode-badge" class="pause-mode-badge">CHẾ ĐỘ CHƠI</span>
+                </div>
+                <div id="pause-pvp-notice" class="pause-pvp-notice hidden">
+                    ⚠️ <b>Chế độ PvP Online:</b> Trận đấu tiếp tục theo thời gian thực để không ngắt kết nối đối thủ.
+                </div>
+                <div class="pause-volume-box">
+                    <div class="vol-label-row">
+                        <span class="vol-title">🔊 ÂM LƯỢNG HỆ THỐNG</span>
+                        <span id="pause-vol-text" class="vol-value">80%</span>
+                    </div>
+                    <div class="vol-slider-row">
+                        <button type="button" id="btn-vol-down" class="vol-btn" title="Giảm âm lượng 10%">➖</button>
+                        <input type="range" id="pause-vol-slider" class="vol-slider" min="0" max="100" value="80" step="5">
+                        <button type="button" id="btn-vol-up" class="vol-btn" title="Tăng âm lượng 10%">➕</button>
+                        <button type="button" id="btn-vol-mute" class="vol-btn mute-btn" title="Bật / Tắt tiếng">🔊</button>
+                    </div>
+                </div>
+                <div class="modal-buttons pause-buttons-stack">
+                    <button class="btn-primary btn-pause-action" id="btn-resume">▶️ TIẾP TỤC</button>
+                    <button class="btn-secondary btn-pause-action" id="btn-restart-pause">🔄 CHƠI LẠI</button>
+                    <button class="btn-danger btn-pause-action" id="btn-quit-lobby">🏠 VỀ SẢNH CHÍNH</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div id="modal-gameover" class="modal-overlay hidden">
+            <div class="modal-card gameover-card">
+                <h1 class="gameover-title">BẠN ĐÃ BỊ ĂN THỊT!</h1>
+                <p class="gameover-subtitle">Môi trường đại dương thật khốc liệt...</p>
+                <div class="game-results">
+                    <div class="result-box">
+                        <span>Tổng Điểm</span>
+                        <strong id="final-score">0</strong>
+                    </div>
+                    <div class="result-box">
+                        <span>Cấp Độ Đạt Được</span>
+                        <strong id="final-level">LV.1</strong>
+                    </div>
+                    <div class="result-box">
+                        <span>Mồi Đã Ăn</span>
+                        <strong id="final-eaten">0</strong>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-primary" id="btn-retry">CHƠI LẠI</button>
+                    <button class="btn-secondary" id="btn-lobby-from-over">VỀ SẢNH CHÍNH</button>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL: ĐĂNG NHẬP / ĐỔI TÀI KHOẢN -->
+        <div id="modal-auth" class="modal-overlay hidden">
+            <div class="modal-card mini-modal auth-modal-card">
+                <div class="modal-header">
+                    <h2>👤 ĐĂNG NHẬP THỦY THỦ</h2>
+                    <button class="modal-close" id="close-auth">✖</button>
+                </div>
+                <div class="modal-body">
+                    <p class="auth-hint">Nhập tên để lưu điểm số và phân biệt giữa Player A & Player B khi thi đấu PvP:</p>
+                    <form id="auth-form" class="auth-form-box">
+                        <div class="form-group-custom">
+                            <label for="auth-username-input">Tên Thủy Thủ:</label>
+                            <input type="text" id="auth-username-input" class="custom-input" placeholder="Ví dụ: Player A, Thủy Thủ..." maxlength="20" required>
+                        </div>
+                        <div class="quick-pick-row">
+                            <span>Chọn nhanh khi test 2 Tab:</span>
+                            <div class="chip-group">
+                                <button type="button" class="btn-chip" id="btn-pick-player-a">👤 Player A</button>
+                                <button type="button" class="btn-chip" id="btn-pick-player-b">👥 Player B</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">XÁC NHẬN VÀO SẢNH</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: CHỌN ĐỘ KHÓ PVE (THUẬT TOÁN HỖ TRỢ DDA) -->
+        <div id="modal-pve-difficulty" class="modal-overlay hidden">
+            <div class="modal-card pve-diff-modal-card">
+                <div class="modal-header">
+                    <h2>🤖 CHỌN ĐỘ KHÓ SINH TỒN PvE</h2>
+                    <button class="modal-close" id="close-pve-diff">✖</button>
+                </div>
+                <div class="modal-body">
+                    <p class="diff-modal-hint">Hệ thống hỗ trợ tự động (DDA) sẽ điều tiết tốc độ cá và số lượng cá con theo tiến độ săn mồi của bạn:</p>
+                    <div class="diff-options-grid">
+                        <!-- Option: DỄ (EASY) -->
+                        <div class="diff-card diff-easy-card" id="btn-diff-easy">
+                            <div class="diff-header">
+                                <span class="diff-icon">🟢</span>
+                                <div class="diff-titles">
+                                    <span class="diff-name">DỄ (EASY)</span>
+                                    <span class="diff-tag tag-easy">Thư giãn / Người mới</span>
+                                </div>
+                            </div>
+                            <ul class="diff-desc-list">
+                                <li>✨ <b>Hỗ trợ tối đa:</b> Tự động sinh nhiều cá con quanh người chơi khi tiến hóa chậm.</li>
+                                <li>🐢 <b>Cá bơi chậm:</b> Cá xung quanh giảm tốc đến 35%, dễ dàng bắt mồi.</li>
+                                <li>🤖 <b>Cá máy:</b> Phản xạ khoan thai, tốc độ bơi 85%.</li>
+                            </ul>
+                            <button type="button" class="btn-diff-select btn-easy">CHỌN MỨC DỄ</button>
+                        </div>
+
+                        <!-- Option: VỪA (MEDIUM) - ĐỀ XUẤT -->
+                        <div class="diff-card diff-medium-card featured" id="btn-diff-medium">
+                            <div class="diff-badge-featured">⭐ KHUYÊN DÙNG</div>
+                            <div class="diff-header">
+                                <span class="diff-icon">🟡</span>
+                                <div class="diff-titles">
+                                    <span class="diff-name">VỪA (MEDIUM)</span>
+                                    <span class="diff-tag tag-medium">Cân bằng chuẩn</span>
+                                </div>
+                            </div>
+                            <ul class="diff-desc-list">
+                                <li>⚖️ <b>DDA Chuẩn:</b> Cân bằng nhịp độ ván đấu mượt mà, duy trì thời lượng kịch tính.</li>
+                                <li>🐟 <b>Điều tiết thông minh:</b> Giảm 25% tốc cá khi gặp khó, tăng 30% tốc khi tiến hóa nhanh.</li>
+                                <li>🤖 <b>Cá máy:</b> Tốc độ chuẩn 100%, tích cực săn mồi cạnh tranh.</li>
+                            </ul>
+                            <button type="button" class="btn-diff-select btn-medium">CHỌN MỨC VỪA</button>
+                        </div>
+
+                        <!-- Option: KHÓ (HARD) -->
+                        <div class="diff-card diff-hard-card" id="btn-diff-hard">
+                            <div class="diff-header">
+                                <span class="diff-icon">🔴</span>
+                                <div class="diff-titles">
+                                    <span class="diff-name">KHÓ (HARD)</span>
+                                    <span class="diff-tag tag-hard">Thử thách cao thủ</span>
+                                </div>
+                            </div>
+                            <ul class="diff-desc-list">
+                                <li>🔥 <b>Áp lực cao:</b> Ít cá con, cá xung quanh nhanh nhẹn và cảnh giác cao độ.</li>
+                                <li>⚡ <b>Tăng tốc gắt gao:</b> Cá xung quanh tăng tới 45% tốc độ khi bạn bứt phá.</li>
+                                <li>🤖 <b>Cá máy:</b> Săn mồi thần tốc (+15% tốc độ), phản xạ nhạy bén.</li>
+                            </ul>
+                            <button type="button" class="btn-diff-select btn-hard">CHỌN MỨC KHÓ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: SẢNH ĐỐI KHÁNG PVP (MÃ PHÒNG 4 SỐ) -->
+        <div id="modal-pvp" class="modal-overlay hidden">
+            <div class="modal-card pvp-modal-card">
+                <div class="modal-header">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h2>⚔️ ĐỐI KHÁNG PvP (MÃ PHÒNG 4 SỐ)</h2>
+                        <span class="pvp-version-badge" title="Đồng bộ phiên bản PvP">v2.5.0-PVP</span>
+                    </div>
+                    <button class="modal-close" id="close-pvp">✖</button>
+                </div>
+                
+                <div class="modal-body">
+                    <!-- SETUP VIEW: CHỌN TẠO PHÒNG HOẶC NHẬP MÃ -->
+                    <div id="pvp-setup-view">
+                        <div class="pvp-tab-buttons">
+                            <button id="pvp-tab-create" class="pvp-tab-pill active">👑 TẠO PHÒNG MỚI</button>
+                            <button id="pvp-tab-join" class="pvp-tab-pill">🚀 NHẬP MÃ VÀO PHÒNG</button>
+                        </div>
+
+                        <!-- Panel 1: Tạo phòng -->
+                        <div id="pvp-panel-create" class="pvp-tab-content">
+                            <div class="pvp-panel-box">
+                                <span class="pvp-icon-hero">👑</span>
+                                <h3>Khởi Tạo Phòng Thi Đấu</h3>
+                                <p>Hệ thống tự động sinh <b>mã 4 số ngẫu nhiên (1000 - 9999)</b> không trùng lặp. Gửi mã này cho đối thủ để cùng vào trận!</p>
+                                <button id="btn-do-create-room" class="btn-primary btn-hero-pulse">
+                                    👑 TẠO PHÒNG MÃ 4 SỐ
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Panel 2: Nhập mã phòng -->
+                        <div id="pvp-panel-join" class="pvp-tab-content hidden">
+                            <div class="pvp-panel-box">
+                                <span class="pvp-icon-hero">🎯</span>
+                                <h3>Tham Gia Trận Đấu</h3>
+                                <p>Nhập mã phòng gồm 4 chữ số do đối thủ chia sẻ:</p>
+                                <div class="pvp-input-wrapper">
+                                    <input type="text" id="input-room-code" class="room-digits-input" placeholder="1000 - 9999" maxlength="4" inputmode="numeric">
+                                    <button id="btn-do-join-room" class="btn-primary">🚀 VÀO PHÒNG NGAY</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thông báo lỗi khi nhập sai/phòng đầy/phòng đóng -->
+                        <div id="pvp-error-banner" class="pvp-error-banner hidden"></div>
+                    </div>
+
+                    <!-- IN-ROOM VIEW: HIỂN THỊ PHÒNG ĐÃ TẠO HOẶC ĐÃ THAM GIA -->
+                    <div id="pvp-room-view" class="hidden">
+                        <div class="room-code-badge-container">
+                            <span class="room-code-title">MÃ PHÒNG ĐỐI KHÁNG:</span>
+                            <div class="room-code-digits-box">
+                                <span class="code-number" id="room-code-display-text">----</span>
+                                <button id="btn-copy-code" class="btn-copy-badge" title="Sao chép mã vào bộ nhớ tạm">📋 Sao chép</button>
+                            </div>
+                        </div>
+
+                        <div id="room-status-badge" class="room-status-badge status-waiting">
+                            ⏳ ĐANG CHỜ ĐỐI THỦ NHẬP MÃ (1/2)...
+                        </div>
+
+                        <!-- ĐỐI ĐẦU 2 NGƯỜI CHƠI (PLAYER A vs PLAYER B) -->
+                        <div class="pvp-faceoff-card">
+                            <!-- Player 1 (Host) -->
+                            <div class="faceoff-player-slot host-slot">
+                                <div class="slot-badge host-badge">👑 CHỦ PHÒNG</div>
+                                <div class="faceoff-avatar-ring">
+                                    <img id="room-p1-img" src="cá kiếm.jpg" alt="Player 1">
+                                </div>
+                                <strong id="room-p1-name" class="faceoff-name">Player A</strong>
+                                <span id="room-p1-char" class="faceoff-char-tag">Cá Kiếm</span>
+                            </div>
+
+                            <div class="faceoff-vs-sign">VS</div>
+
+                            <!-- Player 2 (Guest) -->
+                            <div class="faceoff-player-slot guest-slot">
+                                <div class="slot-badge guest-badge">🎯 ĐỐI THỦ</div>
+
+                                <div id="room-p2-waiting" class="p2-waiting-pulse">
+                                    <div class="slot-spinner"></div>
+                                    <span>Đang chờ Player B nhập mã...</span>
+                                </div>
+
+                                <div id="room-p2-joined" class="p2-joined-content hidden">
+                                    <div class="faceoff-avatar-ring">
+                                        <img id="room-p2-img" src="tôm.png" alt="Player 2">
+                                    </div>
+                                    <strong id="room-p2-name" class="faceoff-name">Player B</strong>
+                                    <span id="room-p2-char" class="faceoff-char-tag">Tôm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="pvp-ready-banner" class="pvp-ready-banner hidden">
+                            🎉 <b>CẢ HAI ĐÃ SẴN SÀNG!</b><br>
+                            Ghép phòng mã 4 số & tài khoản đã thành công.
+                        </div>
+
+                        <div class="room-footer-buttons">
+                            <button id="btn-start-pvp-game" class="btn-primary btn-hero-pulse hidden" style="margin-right: 12px;">⚔️ BẮT ĐẦU TRẬN ĐẤU (PVP)</button>
+                            <button id="btn-start-pvp-solo" class="btn-primary" style="margin-right: 12px; background: linear-gradient(135deg, #00b4d8, #0077b6);">🎮 CHƠI THỬ (SOLO)</button>
+                            <button id="btn-leave-room" class="btn-danger">❌ HỦY & RỜI PHÒNG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Script Modules -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/room.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/assets.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/realtime.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
